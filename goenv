@@ -159,21 +159,16 @@ fish:
 
         goroot = os.path.join(godir, "go")
         gobin = os.path.join(goroot, "bin")
-        oldps1 = os.environ.get("PS1", "\u@\h \W$ ")
-        ps1 = "(golang-{0}) {1}".format(version, oldps1)
         newpath = ":".join([gobin, os.environ.get("PATH", "")])
 
         additionalenv = {
                 "PATH": newpath,
                 "GOROOT": goroot,
                 "GOPATH": gopath,
-                "PS1": ps1,
-                "GOENV": "1",
+                "GOENV": version,
         }
         newenv = os.environ.copy()
         newenv.update(**additionalenv)
-        # TODO instead of defaulting to Bash, detect user's shell and use that
-        # instead
         os.execlpe(os.environ.get("SHELL", '/bin/bash'), "", newenv)
 
     def extract(self, filename):

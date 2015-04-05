@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 from __future__ import print_function
 
 USAGE = u"""
@@ -186,6 +186,13 @@ fish:
         return super(Unix, self).download()
 
 
+class FreeBSD(Unix):
+    def __init__(self, *args, **kwargs):
+        self.platform = "freebsd"
+        self.architecture = "amd64" if self._is_64bit() else "386"
+        self.extension = "tar.gz"
+        super(FreeBSD, self).__init__(*args, **kwargs)
+
 class Linux(Unix):
     def __init__(self, *args, **kwargs):
         self.platform = "linux"
@@ -310,6 +317,8 @@ def main(argv):
         impl = Linux
     elif sys.platform.startswith("darwin"):
         impl = MacOSX
+    elif sys.platform.startswith("freebsd"):
+        impl = FreeBSD
 
     impl(args.version, *gopath, install_only=args.install_only, quiet=args.quiet).go()
 

@@ -16,7 +16,7 @@ from constants import XDG_CACHE_HOME, XDG_CONFIG_HOME, \
                       GOENV_CACHE_HOME, GOENV_CONFIG_HOME, \
                       GOLANG_DISTRIBUTIONS_DIR
 from platform import Linux, MacOSX, FreeBSD
-from utils import default_version, find_for_gopath, ensure_paths, \
+from utils import message, default_version, find_for_gopath, ensure_paths, \
                   substitute, ParseGoDL
 
 def main():
@@ -54,12 +54,18 @@ def main():
 
     ensure_paths(GOENV_CACHE_HOME, GOENV_CONFIG_HOME, GOLANG_DISTRIBUTIONS_DIR, quiet=args.quiet)
 
-    if sys.platform.startswith("linux"):
-        impl = Linux
-    elif sys.platform.startswith("darwin"):
-        impl = MacOSX
-    elif sys.platform.startswith("freebsd"):
-        impl = FreeBSD
+    platforms = {
+            "linux": Linux,
+            "darwin": MacOSX,
+            "freebsd": FreeBSD
+    }
+
+    for key in platforms:
+        if sys.platform.startswith(key):
+            impl = platforms.get(key)
+            break
+    else:
+        message("Your platform '{}' is not supported, sorry!".format(sys.platform), sys.stderr, args.quiet)
 
     impl(args.version, *gopath, install_only=args.install_only, quiet=args.quiet).go()
 

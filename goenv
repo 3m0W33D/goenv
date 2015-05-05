@@ -61,25 +61,25 @@ class Plat(object):
                                 bar))
         if total_read >= total_size:
             print("\n")
-        
+
     def do_download(self, resp, report_hook=None, bufsize=8192):
         if report_hook is None:
             report_hook = self.print_progress
         total_size = int(resp.getheader("Content-Length").strip())
         total_read = 0
         whole = []
-        
+
         while True:
             part = resp.read(bufsize)
             total_read = total_read + len(part)
-            
+
             if not part:
                 break
-                
+
             whole.append(part)
             report_hook(total_read, bufsize, total_size)
         return "".join(whole)
-        
+
     def download(self):
         version = self.version
         architecture = self.architecture

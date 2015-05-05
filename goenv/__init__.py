@@ -10,10 +10,7 @@ and Mac OSX
 
 
 import argparse
-import httplib
-import math
 import os
-import platform
 import sys
 
 from constants import XDG_CACHE_HOME, XDG_CONFIG_HOME, \

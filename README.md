@@ -15,14 +15,10 @@ there.
 
 ## Installation
 
-It is a single Python script, so you can just make it executable and put
-it somewhere in your path.
+Currently goenv is written in python, so installation is a simple `pip
+install` away:
 
-    # you might need to add --no-check-certificate to the wget command...
-    $ wget -O ~/bin/goenv https://raw.github.com/pwoolcoc/goenv/master/goenv
-    # for the love of pete, don't just run scripts you get from the internet, check them first!
-    $ $EDITOR ~/bin/goenv
-    $ chmod +x ~/bin/goenv
+    $ sudo pip install pygoenv
 
 ## Usage
 
@@ -54,8 +50,10 @@ it somewhere in your path.
 
 ## Contact
 
-email: pwoolcoc@gmail.com
+email: paul@woolcock.us
 
 twitter: @pauldwoolcock
 
 jabber: pauldwoolcock@dukgo.com
+
+irc: duncan @ irc.mozilla.org

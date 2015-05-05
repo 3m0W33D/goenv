@@ -294,7 +294,7 @@ def main(argv):
             action='store', nargs='*', help="exclude a directory from the $GOPATH")
     parser.add_argument("--install-only", default=False, dest="install_only", action='store_true',
             help="only download and install the specified version of Go, don't drop into a shell")
-    parser.add_argument("-q", default=False, dest="quiet", action="store_true",
+    parser.add_argument("-q", "--quiet", default=False, dest="quiet", action="store_true",
                         help="only output messages that could be helpful in automated scripts")
 
     args = parser.parse_args()

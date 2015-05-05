@@ -285,7 +285,7 @@ def substitute(path):
     return os.path.realpath(path)
 
 
-def main(argv):
+def main():
     parser = argparse.ArgumentParser(description=USAGE)
     parser.add_argument("--basedir", default='.', help="the directory to start looking for locations to add to the GOPATH")
     parser.add_argument("--go-version", dest='version', action='store',
@@ -331,4 +331,4 @@ def main(argv):
 
 
 if __name__ == u'__main__':
-    main(sys.argv)
+    main()

@@ -296,6 +296,8 @@ def main(argv):
             help="only download and install the specified version of Go, don't drop into a shell")
     parser.add_argument("-q", "--quiet", default=False, dest="quiet", action="store_true",
                         help="only output messages that could be helpful in automated scripts")
+    parser.add_argument("-x", "--no-vendor", default=False, dest="no_vendor",
+            action="store_true", help="Don't create a `vendor` directory at the top level of the project")
 
     args = parser.parse_args()
 
@@ -310,6 +312,11 @@ def main(argv):
     # we should have _something_ in the GOPATH...
     if not gopath:
         gopath = [ os.getcwd() ]
+
+    if not args.no_vendor:
+        vendor_path = substitute("vendor")
+        ensure_paths(vendor_path)
+        gopath.insert(0, vendor_path)
 
     ensure_paths(GOENV_CACHE_HOME, GOENV_CONFIG_HOME, GOLANG_DISTRIBUTIONS_DIR, quiet=args.quiet)
 

@@ -22,7 +22,7 @@ from utils import default_version, find_for_gopath, ensure_paths, \
 def main():
     parser = argparse.ArgumentParser(description=USAGE)
     parser.add_argument("--basedir", default='.', help="the directory to start looking for locations to add to the GOPATH")
-    parser.add_argument("--go-version", dest='version', action='store',
+    parser.add_argument("-g", "--go-version", dest='version', action='store',
             default=None, help="specify a version of Go _other_ than the latest")
     parser.add_argument("--exclude", default=tuple(), dest='exclude',
             action='store', nargs='*', help="exclude a directory from the $GOPATH")

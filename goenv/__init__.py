@@ -8,7 +8,6 @@ Golang distribution. Currently, the supported platforms are Linux
 and Mac OSX
 """
 
-
 import argparse
 import os
 import sys
@@ -16,7 +15,6 @@ import sys
 from constants import XDG_CACHE_HOME, XDG_CONFIG_HOME, \
                       GOENV_CACHE_HOME, GOENV_CONFIG_HOME, \
                       GOLANG_DISTRIBUTIONS_DIR
-
 from platform import Linux, MacOSX, FreeBSD
 from utils import default_version, find_for_gopath, ensure_paths, \
                   substitute, ParseGoDL
@@ -34,7 +32,6 @@ def main():
                         help="only output messages that could be helpful in automated scripts")
     parser.add_argument("-x", "--no-vendor", default=False, dest="no_vendor",
             action="store_true", help="Don't create a `vendor` directory at the top level of the project")
-    parser.add_argument("-r", action="store_true", dest="r", help="NOT USED")
 
     args = parser.parse_args()
 

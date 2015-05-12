@@ -4,7 +4,7 @@ setup(
     version = "1.2",
     packages = find_packages(),
 
-    install_requires = ['requests>=2.7.0'],
+    install_requires = ['requests>=2.2.0'],
 
     entry_points = {
         'console_scripts': [ 'goenv = goenv:main' ],

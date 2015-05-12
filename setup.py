@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 setup(
     name = "pygoenv",
-    version = "1.1",
+    version = "1.2",
     packages = find_packages(),
 
     install_requires = ['requests>=2.7.0'],

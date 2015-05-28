@@ -1,14 +1,27 @@
 #!/usr/bin/env python
-from __future__ import print_function
+u"""
+goenv
 
-USAGE = u"""
 This is intended to be a cross-platform way to quickly set up
 a go environment, including downloading and extracting the necessary
-Golang distribution. Currently, the supported platforms are Linux
-and Mac OSX
-"""
+Golang distribution. Currently, the supported platforms are Linux,
+Mac OSX, and FreeBSD
 
-import argparse
+Usage:
+  goenv [--basedir=<basedir>] [-g <version> | --go-version=<version>] [--exclude=<path>]... [--install-only] [-q | --quiet] [-x | --no-vendor]
+
+Options:
+  --basedir=<basedir>                       the directory to start looking for locations to add to the GOPATH [default: .]
+  -g <version>, --go-version=<version>      specify a version of Go _other_ than the latest
+  --exclude=<path>                          exclude a directory from the $GOPATH
+  --install-only                            only download and install the specified version of Go, don't drop into a shell
+  -q, --quiet                               only output messages that could be helpful in automated scripts
+  -x, --no-vendor                           Don't create a `vendor` directory at the top level of the project")
+"""
+from __future__ import print_function
+
+__version__ = "1.3.1"
+
 import os
 import sys
 
@@ -20,39 +33,29 @@ from utils import message, default_version, find_for_gopath, ensure_paths, \
                   substitute, ParseGoDL
 
 def main():
-    parser = argparse.ArgumentParser(description=USAGE)
-    parser.add_argument("--basedir", default='.', help="the directory to start looking for locations to add to the GOPATH")
-    parser.add_argument("-g", "--go-version", dest='version', action='store',
-            default=None, help="specify a version of Go _other_ than the latest")
-    parser.add_argument("--exclude", default=tuple(), dest='exclude',
-            action='store', nargs='*', help="exclude a directory from the $GOPATH")
-    parser.add_argument("--install-only", default=False, dest="install_only", action='store_true',
-            help="only download and install the specified version of Go, don't drop into a shell")
-    parser.add_argument("-q", "--quiet", default=False, dest="quiet", action="store_true",
-                        help="only output messages that could be helpful in automated scripts")
-    parser.add_argument("-x", "--no-vendor", default=False, dest="no_vendor",
-            action="store_true", help="Don't create a `vendor` directory at the top level of the project")
+    from docopt import docopt
+    args = docopt(__doc__, version=__version__)
 
-    args = parser.parse_args()
+    args_exclude = args.get('--exclude')
+    exclude = []
+    if args_exclude:
+        exclude = [os.path.realpath(e) for e in args_exclude]
 
-    if args.exclude is not None:
-        exclude = [os.path.realpath(e) for e in args.exclude]
+    version = args.get('--go-version') if args.get('--go-version') is not None else default_version()
 
-    if args.version is None:
-        args.version = default_version()
-
-    gopath = find_for_gopath(substitute(args.basedir), exclude)
+    gopath = find_for_gopath(substitute(args.get('--basedir')), exclude)
 
     # we should have _something_ in the GOPATH...
     if not gopath:
         gopath = [ os.getcwd() ]
 
-    if not args.no_vendor:
+    if not args.get('--no-vendor'):
         vendor_path = substitute("vendor")
         ensure_paths(vendor_path)
         gopath.insert(0, vendor_path)
 
-    ensure_paths(GOENV_CACHE_HOME, GOENV_CONFIG_HOME, GOLANG_DISTRIBUTIONS_DIR, quiet=args.quiet)
+    quiet = args.get('--quiet')
+    ensure_paths(GOENV_CACHE_HOME, GOENV_CONFIG_HOME, GOLANG_DISTRIBUTIONS_DIR, quiet=quiet)
 
     platforms = {
             "linux": Linux,
@@ -65,9 +68,10 @@ def main():
             impl = platforms.get(key)
             break
     else:
-        message("Your platform '{}' is not supported, sorry!".format(sys.platform), sys.stderr, args.quiet)
+        message("Your platform '{}' is not supported, sorry!".format(sys.platform), sys.stderr, quiet)
 
-    impl(args.version, *gopath, install_only=args.install_only, quiet=args.quiet).go()
+    install_only = args.get('--install-only')
+    impl(version, *gopath, install_only=install_only, quiet=quiet).go()
 
 
 if __name__ == u'__main__':

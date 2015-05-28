@@ -39,6 +39,7 @@ def ensure_paths(*paths, **kwds):
             os.makedirs(path)
 
 def substitute(path):
+    print(path)
     if path == '.':
         return os.environ['PWD']
     elif path == '..':

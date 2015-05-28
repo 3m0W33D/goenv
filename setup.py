@@ -1,10 +1,14 @@
 from setuptools import setup, find_packages
+import goenv
 setup(
     name = "pygoenv",
-    version = "1.3",
+    version = goenv.__version__,
     packages = find_packages(),
 
-    install_requires = ['requests>=2.2.0'],
+    install_requires = [
+        'requests>=2.2.0',
+        'docopt>=0.2.6',
+    ],
 
     entry_points = {
         'console_scripts': [ 'goenv = goenv:main' ],

@@ -8,7 +8,7 @@ Golang distribution. Currently, the supported platforms are Linux,
 Mac OSX, and FreeBSD
 
 Usage:
-  goenv [--basedir=<basedir>] [-g <version> | --go-version=<version>] [--exclude=<path>]... [--install-only] [-q | --quiet] [-x | --no-vendor]
+  goenv [--basedir=<basedir>] [-g <version> | --go-version=<version>] [--exclude=<path>]... [--install-only] [-q | --quiet]
 
 Options:
   --basedir=<basedir>                       the directory to start looking for locations to add to the GOPATH [default: .]
@@ -16,11 +16,10 @@ Options:
   --exclude=<path>                          exclude a directory from the $GOPATH
   --install-only                            only download and install the specified version of Go, don't drop into a shell
   -q, --quiet                               only output messages that could be helpful in automated scripts
-  -x, --no-vendor                           Don't create a `vendor` directory at the top level of the project")
 """
 from __future__ import print_function
 
-__version__ = "1.4.0"
+__version__ = "1.4.1"
 
 import os
 import sys
@@ -48,11 +47,6 @@ def main():
     # we should have _something_ in the GOPATH...
     if not gopath:
         gopath = [ os.getcwd() ]
-
-    if not args.get('--no-vendor'):
-        vendor_path = substitute("vendor")
-        ensure_paths(vendor_path)
-        gopath.insert(0, vendor_path)
 
     quiet = args.get('--quiet')
     ensure_paths(GOENV_CACHE_HOME, GOENV_CONFIG_HOME, GOLANG_DISTRIBUTIONS_DIR, quiet=quiet)

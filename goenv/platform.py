@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import httplib
+import requests
 import math
 import os
 import sys
@@ -46,12 +46,11 @@ class Plat(object):
     def do_download(self, resp, report_hook=None, bufsize=8192):
         if report_hook is None:
             report_hook = self.print_progress
-        total_size = int(resp.getheader("Content-Length").strip())
+        total_size = int(resp.headers.get("Content-Length").strip())
         total_read = 0
         whole = []
 
-        while True:
-            part = resp.read(bufsize)
+        for part in resp.iter_content(bufsize):
             total_read = total_read + len(part)
 
             if not part:
@@ -59,6 +58,7 @@ class Plat(object):
 
             whole.append(part)
             report_hook(total_read, bufsize, total_size)
+
         return "".join(whole)
 
     def download(self):
@@ -74,12 +74,11 @@ class Plat(object):
         path = DOWNLOAD_PATH.format(filename=filename)
         fullpath = os.path.join(GOENV_CACHE_HOME, filename)
         if not os.path.exists(fullpath):
-            self.message("Downloading http://{0}{1}".format(DOWNLOAD_HOSTNAME, path), file=sys.stderr)
+            url = "http://{0}{1}".format(DOWNLOAD_HOSTNAME, path)
+            self.message("Downloading {0}".format(url), file=sys.stderr)
             try:
-                connection = httplib.HTTPConnection(DOWNLOAD_HOSTNAME)
-                connection.request("GET", path)
-                response = self.do_download(connection.getresponse(buffering=True))
-            except httplib.HTTPException as ex:
+                response = self.do_download(requests.get(url, stream=True))
+            except requests.exceptions.RequestException as ex:
                 self.message(ex.message, file=sys.stderr)
                 sys.exit(1)
 

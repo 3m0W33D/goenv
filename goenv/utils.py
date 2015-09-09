@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
-import httplib
+import requests
 import os
 import sys
 
@@ -12,12 +12,11 @@ def message(message, file, quiet=False, override=False):
         print(message, file=file)
 
 def default_version():
-    conn = httplib.HTTPConnection("golang.org"); conn.connect()
-    conn.request("GET", "/dl/")
-    resp = conn.getresponse()
-    if resp.status // 100 != 2:
+    print("USING requests")
+    r = requests.get("http://golang.org/dl/")
+    if r.status_code // 100 != 2:
         return raw_input("Error detecting the default Go version.\nPlease enter the version you wish to install (i.e., 1.3): ")
-    body = resp.read()
+    body = r.content
     parser = ParseGoDL()
     parser.feed(body)
     return parser.latest

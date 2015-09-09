@@ -8,6 +8,7 @@ setup(
     install_requires = [
         'requests>=2.2.0',
         'docopt>=0.2.6',
+        'clint>=0.5.1',
     ],
 
     entry_points = {

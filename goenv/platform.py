@@ -6,6 +6,7 @@ import math
 import os
 import sys
 import tarfile
+from clint.textui import progress
 
 from constants import XDG_CACHE_HOME, XDG_CONFIG_HOME, \
                       GOENV_CACHE_HOME, GOENV_CONFIG_HOME, \
@@ -43,21 +44,18 @@ class Plat(object):
         if total_read >= total_size:
             print("\n")
 
-    def do_download(self, resp, report_hook=None, bufsize=8192):
-        if report_hook is None:
-            report_hook = self.print_progress
+    def do_download(self, resp, report_hook=None, bufsize=1024):
         total_size = int(resp.headers.get("Content-Length").strip())
         total_read = 0
         whole = []
 
-        for part in resp.iter_content(bufsize):
+        for part in progress.bar(resp.iter_content(bufsize), expected_size=(total_size / bufsize) + 1, label='KB '):
             total_read = total_read + len(part)
 
             if not part:
                 break
 
             whole.append(part)
-            report_hook(total_read, bufsize, total_size)
 
         return "".join(whole)
 

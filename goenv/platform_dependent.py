@@ -6,6 +6,7 @@ import math
 import os
 import sys
 import tarfile
+import platform
 from clint.textui import progress
 
 from constants import XDG_CACHE_HOME, XDG_CONFIG_HOME, \

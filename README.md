@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/pwoolcoc/goenv.svg)](https://travis-ci.org/pwoolcoc/goenv)
+
 # goenv - Set up a Golang environment
 
 I got tired of manually setting my GOPATH when I went from one project to another,

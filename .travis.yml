@@ -2,3 +2,4 @@ language: python
 os:
     - linux
     - osx
+sudo: false

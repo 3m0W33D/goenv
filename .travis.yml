@@ -1,6 +1,13 @@
 language: python
-os:
-    - linux
-    - osx
+python:
+    - 2.7
+    - 3.2
+    - 3.3
+    - 3.4
+    - 3.5
+# Someday travis-ci.org will support python on osx...
+# os:
+#     - linux
+#     - osx
 sudo: false
 script: nosetests

@@ -17,18 +17,18 @@ Options:
   --install-only                            only download and install the specified version of Go, don't drop into a shell
   -q, --quiet                               only output messages that could be helpful in automated scripts
 """
-from __future__ import print_function
+from __future__ import print_function, absolute_import
 
 __version__ = "1.5.0"
 
 import os
 import sys
 
-from constants import XDG_CACHE_HOME, XDG_CONFIG_HOME, \
+from .constants import XDG_CACHE_HOME, XDG_CONFIG_HOME, \
                       GOENV_CACHE_HOME, GOENV_CONFIG_HOME, \
                       GOLANG_DISTRIBUTIONS_DIR
-from platform_dependent import Linux, MacOSX, FreeBSD
-from utils import message, default_version, find_for_gopath, ensure_paths, \
+from .platform_dependent import Linux, MacOSX, FreeBSD
+from .utils import message, default_version, find_for_gopath, ensure_paths, \
                   substitute, ParseGoDL
 
 def main():

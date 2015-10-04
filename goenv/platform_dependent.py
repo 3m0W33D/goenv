@@ -9,12 +9,12 @@ import tarfile
 import platform
 from clint.textui import progress
 
-from constants import XDG_CACHE_HOME, XDG_CONFIG_HOME, \
+from .constants import XDG_CACHE_HOME, XDG_CONFIG_HOME, \
                       GOENV_CACHE_HOME, GOENV_CONFIG_HOME, \
                       GOLANG_DISTRIBUTIONS_DIR, DOWNLOAD_HOSTNAME, \
                       DOWNLOAD_PATH, DOWNLOAD_FILENAME
 
-from utils import message
+from .utils import message
 
 class Plat(object):
     def __init__(self, version=None, *gopath, **opts):

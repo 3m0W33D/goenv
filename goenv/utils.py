@@ -5,7 +5,7 @@ import requests
 import os
 import sys
 
-from HTMLParser import HTMLParser
+from .compat import HTMLParser
 
 def message(message, file, quiet=False, override=False):
     if not quiet or (quiet and override):

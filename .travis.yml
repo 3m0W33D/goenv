@@ -1,15 +1,12 @@
 language: python
 install:
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]] ; then
-          brew install python virtualenv pip
-      fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]] ; then brew install python virtualenv pip; fi
 python:
     - 2.7
     - 3.2
     - 3.3
     - 3.4
     - 3.5
-Someday travis-ci.org will support python on osx...
 os:
     - linux
     - osx

@@ -1,15 +1,14 @@
 from setuptools import setup, find_packages
 import goenv
+with open("requirements.txt") as fh:
+    reqs = fh.read().split()
+print(reqs)
 setup(
     name = "pygoenv",
     version = goenv.__version__,
     packages = find_packages(),
 
-    install_requires = [
-        'requests>=2.2.0',
-        'docopt>=0.2.6',
-        'clint>=0.5.1',
-    ],
+    install_requires = reqs,
 
     entry_points = {
         'console_scripts': [ 'goenv = goenv:main' ],

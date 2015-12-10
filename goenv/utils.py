@@ -2,6 +2,7 @@
 from __future__ import print_function
 
 import requests
+import re
 import os
 import sys
 
@@ -12,14 +13,14 @@ def message(message, file, quiet=False, override=False):
         print(message, file=file)
 
 def default_version():
-    print("USING requests")
-    r = requests.get("http://golang.org/dl/")
+    r = requests.get("https://golang.org/")
     if r.status_code // 100 != 2:
         return raw_input("Error detecting the default Go version.\nPlease enter the version you wish to install (i.e., 1.3): ")
     body = r.content
-    parser = ParseGoDL()
-    parser.feed(body)
-    return parser.latest
+
+    reg = re.compile("Build version go(.+)\.<br>")
+    m = re.search(reg, r.content)
+    return m.group(1)
 
 def all_for_gopath(base):
     return [substitute(loc) for (loc, dirs, files) in os.walk(base) if 'src' in dirs]
@@ -38,7 +39,6 @@ def ensure_paths(*paths, **kwds):
             os.makedirs(path)
 
 def substitute(path):
-    print(path)
     if path == '.':
         return os.environ['PWD']
     elif path == '..':

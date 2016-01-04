@@ -10,11 +10,6 @@ The main difference is that instead of an 'activate' script that sets up your en
 this opens up a new subshell for you to work in. It will also download
 and install the version of Go that you want it to.
 
-It also supports vendoring dependencies by added a top-level `vendor`
-directory to a project, and placing that directory first in the
-`$GOPATH` so that dependencies fetched with `go get` will be placed
-there.
-
 ## Installation
 
 Currently goenv is written in python, so installation is a simple `pip

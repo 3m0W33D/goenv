@@ -184,16 +184,7 @@ class Linux(Unix):
 class MacOSX(Unix):
     def __init__(self, *args, **kwargs):
         self.platform = "darwin"
-        arch = "amd64" if self._is_64bit() else "386"
-        v, _, _ = platform.mac_ver()
-        _, minor, _ = v.split('.')
-
-        if minor < 8:
-            osx_version = "10.6"
-        elif minor >= 8:
-            osx_version = "10.8"
-
-        self.architecture = "{0}-osx{1}".format(arch, osx_version)
+        self.architecture = "amd64" if self._is_64bit() else "386"
         self.extension = "tar.gz"
 
         super(MacOSX, self).__init__(*args)

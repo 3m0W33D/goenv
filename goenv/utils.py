@@ -16,10 +16,10 @@ def default_version():
     r = requests.get("https://golang.org/")
     if r.status_code // 100 != 2:
         return raw_input("Error detecting the default Go version.\nPlease enter the version you wish to install (i.e., 1.3): ")
-    body = r.content
+    body = r.content.decode("utf-8")
 
     reg = re.compile("Build version go(.+)\.<br>")
-    m = re.search(reg, r.content)
+    m = re.search(reg, body)
     return m.group(1)
 
 def all_for_gopath(base):

@@ -9,21 +9,19 @@ The main difference is that instead of an 'activate' script that sets up your en
 this opens up a new subshell for you to work in. It will also download
 and install the version of Go that you want it to. -->
 
-<!-- ## Installation
+## Installation
 
-Currently goenv is written in python, so installation is a simple `pip
+Currently goenv is written in python, so installation is not a simple `pip
 install` away:
 
-    $ sudo pip install pygoenv -->
+    $ sudo pip install requests clint 
+    $ sudo pip install git+https://github.com/3m0W33D/goenv.git
 
 ## Usage
 
     $ cd /path/to/project
     $ goenv
     $ source bin/activate
-
-    # specify Golang version
-    $ goenv --go-version 1.1
 
     # specify Golang version
     $ goenv --go-version 1.1

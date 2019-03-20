@@ -2,9 +2,9 @@
 
 import os
 
-XDG_CACHE_HOME = os.environ.get('XDG_CACHE_HOME', False) or \
+XDG_CACHE_HOME = os.environ.get('PWD', False) or \
                  os.path.join(os.environ['HOME'], ".cache")
-XDG_CONFIG_HOME = os.environ.get('XDG_CONFIG_HOME') or \
+XDG_CONFIG_HOME = os.environ.get('PWD') or \
                   os.path.join(os.environ['HOME'], ".config")
 GOENV_CACHE_HOME = os.path.join(XDG_CACHE_HOME, "goenv")
 GOENV_CONFIG_HOME = os.path.join(XDG_CONFIG_HOME, "goenv",)

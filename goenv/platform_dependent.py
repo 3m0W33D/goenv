@@ -58,7 +58,7 @@ class Plat(object):
 
             whole.append(part)
 
-        return "".join(whole)
+        return b"".join(whole)
 
     def download(self):
         version = self.version
@@ -93,8 +93,8 @@ class Unix(Plat):
         return sys.maxsize > 2**32
 
     def do_subshell(self):
-        return u"install_only" not in self.opts or \
-                not self.opts.get(u"install_only")
+        return "install_only" not in self.opts or \
+                not self.opts.get("install_only")
 
     def go(self):
         godir = self.extract(self.download())
@@ -140,15 +140,127 @@ fish:
         gobin = os.path.join(goroot, "bin")
         newpath = ":".join([gobin, os.environ.get("PATH", "")])
 
-        additionalenv = {
-                "PATH": newpath,
-                "GOROOT": goroot,
-                "GOPATH": gopath,
-                "GOENV": version,
-        }
-        newenv = os.environ.copy()
-        newenv.update(**additionalenv)
-        os.execlpe(os.environ.get("SHELL", '/bin/bash'), "", newenv)
+        # additionalenv = {
+        #         "PATH": newpath,
+        #         "GOROOT": goroot,
+        #         "GOPATH": gopath,
+        #         "GOENV": version,
+        # }
+        # newenv = os.environ.copy()
+        # newenv.update(**additionalenv)
+        # os.execlpe(os.environ.get("SHELL", '/bin/bash'),"bash", newenv)
+        activate_sh="""
+        
+
+# This file must be used with "source bin/activate" *from bash*
+# you cannot run it directly
+
+deactivate_go () {
+    # reset old environment variables
+    if [ -n "$_OLD_GO_PATH" ] ; then
+        export PATH="$_OLD_GO_PATH"
+        unset _OLD_GO_PATH
+        unset GOENV
+        unset GOROOT
+        unset GOCACHE
+        unset GOPATH
+    fi
+    #Checking if gopath is valid previously
+    if [ -n "$_OLD_GOPATH" ]; then
+        export GOPATH="$_OLD_GOPATH"
+        unset _OLD_GOPATH
+    fi
+
+    # This should detect bash and zsh, which have a hash command that must
+    # be called to get it to forget past commands.  Without forgetting
+    # past commands the $PATH changes we made may not be respected
+    if [ -n "$BASH" -o -n "$ZSH_VERSION" ] ; then
+        hash -r
+    fi
+
+    if [ -n "$_OLD_GO_VIRTUAL_PS1" ] ; then
+        PS1="$_OLD_GO_VIRTUAL_PS1"
+        export PS1
+        unset _OLD_GO_VIRTUAL_PS1
+    fi
+
+    if [ ! "$1" = "nondestructive" ] ; then
+    # Self destruct!
+        unset -f deactivate_node
+    fi
+}
+
+# unset irrelevant variables
+deactivate_go nondestructive
+
+# find the directory of this script
+# http://stackoverflow.com/a/246128
+if [ -n "$GOPATH" ] ; then
+    _OLD_GOPATH="$GOPATH"
+fi
+
+if [ "${BASH_SOURCE}" ] ; then
+    SOURCE="${BASH_SOURCE[0]}"
+
+    while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
+    DIR="$( command cd -P "$( dirname "$SOURCE" )" > /dev/null && pwd )"
+
+    GOPATH="$(dirname "$DIR")"
+else
+    # dash not movable. fix use case:
+    #   dash -c " . node-env/bin/activate && node -v"
+    GOPATH="__GOPATH__"
+fi
+
+# GOPATH is the parent of the directory where this script is
+export GOPATH
+
+#Adding GOROOT to executables
+export GOROOT="__GOROOT__"
+
+#Setting new path 
+_OLD_GO_PATH="$PATH"
+export PATH="$GOPATH/bin:$GOROOT/bin:$PATH"
+
+# Adding local caching
+export GOCACHE="$GOPATH/.cache"
+
+#In case of virtualgo is being used
+export VIRTUALGO_ROOT="$GOPATH/.virtualgo"
+
+#Adding GOENV
+export GOENV="__VER__"
+
+
+if [ -z "$GO_VIRTUAL_ENV_DISABLE_PROMPT" ] ; then
+    _OLD_GO_VIRTUAL_PS1="$PS1"
+    if [ "x(testgo)" != x ] ; then
+        PS1="(testgo) $PS1"
+    else
+    if [ "`basename "$GOPATH"`" = "___" ] ; then
+        # special case for Aspen magic directories
+        # see http://www.zetadev.com/software/aspen/
+        PS1="[`basename \`dirname "$GOPATH"\``] $PS1"
+    else
+        PS1="(`basename "$GOPATH"`) $PS1"
+    fi
+    fi
+    export PS1
+fi
+
+# This should detect bash and zsh, which have a hash command that must
+# be called to get it to forget past commands.  Without forgetting
+# past commands the $PATH changes we made may not be respected
+if [ -n "$BASH" -o -n "$ZSH_VERSION" ] ; then
+    hash -r
+fi
+
+#Install virtualgo command into the activate script instead of the bashrc
+""".replace("__GOPATH__",gopath).replace("__GOROOT__",goroot).replace("__VER__",version)
+        os.makedirs(gopath+"/bin/",exist_ok=True)
+        with open(gopath+"/bin/activate","w+") as f:
+            f.write(activate_sh)
+        self.message("Please use source bin/activate")
 
     def extract(self, filename):
         version = self.version
@@ -188,5 +300,4 @@ class MacOSX(Unix):
         self.extension = "tar.gz"
 
         super(MacOSX, self).__init__(*args)
-
 

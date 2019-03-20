@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from __future__ import print_function
+
 
 import requests
 import re
@@ -15,11 +15,11 @@ def message(message, file, quiet=False, override=False):
 def default_version():
     r = requests.get("https://golang.org/")
     if r.status_code // 100 != 2:
-        return raw_input("Error detecting the default Go version.\nPlease enter the version you wish to install (i.e., 1.3): ")
+        return input("Error detecting the default Go version.\nPlease enter the version you wish to install (i.e., 1.3): ")
     body = r.content
 
     reg = re.compile("Build version go(.+)\.<br>")
-    m = re.search(reg, r.content)
+    m = re.search(reg, r.content.decode('utf-8'))
     return m.group(1)
 
 def all_for_gopath(base):
@@ -29,7 +29,7 @@ def find_for_gopath(base, exclude=None):
     if exclude is None:
         exclude = []
     alldirs = all_for_gopath(base)
-    return [ d for d in alldirs if d not in exclude]
+    return [ d for d in alldirs if d not in exclude and os.getcwd()+"/goenv" not in d]
 
 def ensure_paths(*paths, **kwds):
     quiet = kwds.pop("quiet", False)
@@ -67,5 +67,4 @@ class ParseGoDL(HTMLParser):
         if not id.startswith("go"):
             return
         self.latest = id[2:]
-
 

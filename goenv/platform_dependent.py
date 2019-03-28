@@ -186,7 +186,7 @@ deactivate_go () {
 
     if [ ! "$1" = "nondestructive" ] ; then
     # Self destruct!
-        unset -f deactivate_node
+        unset -f deactivate_go
     fi
 }
 

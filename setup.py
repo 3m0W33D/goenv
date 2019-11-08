@@ -2,6 +2,7 @@ from setuptools import setup, find_packages
 import goenv
 with open("requirements.txt") as fh:
     reqs = fh.read().split()
+print(reqs)
 setup(
     name = "pygoenv",
     version = goenv.__version__,

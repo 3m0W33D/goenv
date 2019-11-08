@@ -19,7 +19,7 @@ Options:
 """
 from __future__ import print_function, absolute_import
 
-__version__ = "1.8.0"
+__version__ = "1.9.0"
 
 import os
 import sys

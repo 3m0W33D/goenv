@@ -13,12 +13,12 @@ def message(message, file, quiet=False, override=False):
         print(message, file=file)
 
 def default_version():
-    r = requests.get("https://golang.org/")
+    r = requests.get("https://golang.org/dl/")
     if r.status_code // 100 != 2:
         return input("Error detecting the default Go version.\nPlease enter the version you wish to install (i.e., 1.3): ")
     body = r.content
 
-    reg = re.compile("Build version go(.+)\.<br>")
+    reg = re.compile("go(.+) ▾</h2>")
     m = re.search(reg, r.content.decode('utf-8'))
     return m.group(1)
 

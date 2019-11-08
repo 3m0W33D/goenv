@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
-from goenv import __version__
+# from goenv import __version__
 with open("requirements.txt") as fh:
     reqs = fh.read().split()
 print(reqs)
 setup(
     name = "pygoenv",
-    version = __version__,
+    version = "1.9.0",
     packages = find_packages(),
 
     install_requires = reqs,

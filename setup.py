@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-from goenv.__init__ import __version__
+from .goenv.__init__ import __version__
 with open("requirements.txt") as fh:
     reqs = fh.read().split()
 setup(

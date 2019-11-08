@@ -222,8 +222,13 @@ export GOROOT="__GOROOT__"
 _OLD_GO_PATH="$PATH"
 export PATH="$GOPATH/bin:$GOROOT/bin:$PATH"
 
+#Adding gobin for compiled executables
+export GOBIN="$GOPATH/bin"
+
 #Fixing installed location
 export GOPATH="$GOPATH/.goenv"
+
+export PATH="$GOPATH/bin:$PATH"
 
 # Adding local caching
 export GOCACHE="$GOPATH/.goenv/.cache"

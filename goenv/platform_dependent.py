@@ -209,7 +209,7 @@ if [ "${BASH_SOURCE}" ] ; then
 else
     # dash not movable. fix use case:
     #   dash -c " . node-env/bin/activate && node -v"
-    GOPATH="__GOPATH__"
+    GOPATH="__GOPATH__/.goenv"
 fi
 
 # GOPATH is the parent of the directory where this script is
@@ -223,7 +223,7 @@ _OLD_GO_PATH="$PATH"
 export PATH="$GOPATH/bin:$GOROOT/bin:$PATH"
 
 # Adding local caching
-export GOCACHE="$GOPATH/.cache"
+export GOCACHE="$GOPATH/.goenv/.cache"
 
 #In case of virtualgo is being used
 export VIRTUALGO_ROOT="$GOPATH/.virtualgo"

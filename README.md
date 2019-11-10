@@ -14,7 +14,6 @@ and install the version of Go that you want it to. -->
 Currently goenv is written in python, so installation is not a simple `pip
 install` away:
 
-    $ sudo pip install requests clint 
     $ sudo pip install git+https://github.com/3m0W33D/goenv.git
 
 ## Usage

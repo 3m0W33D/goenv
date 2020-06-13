@@ -207,8 +207,6 @@ if [ "${BASH_SOURCE}" ] ; then
 
     GOPATH="$(dirname "$DIR")"
 else
-    # dash not movable. fix use case:
-    #   dash -c " . node-env/bin/activate && node -v"
     GOPATH="__GOPATH__"
 fi
 
@@ -242,8 +240,8 @@ export GOENV="__VER__"
 
 if [ -z "$GO_VIRTUAL_ENV_DISABLE_PROMPT" ] ; then
     _OLD_GO_VIRTUAL_PS1="$PS1"
-    if [ "x(testgo)" != x ] ; then
-        PS1="(testgo) $PS1"
+    if [ "x__GO_PROMPT__" != x ] ; then
+        PS1="(__GO_PROMPT__) $PS1"
     else
     if [ "`basename "$GOPATH"`" = "___" ] ; then
         # special case for Aspen magic directories
@@ -264,7 +262,10 @@ if [ -n "$BASH" -o -n "$ZSH_VERSION" ] ; then
 fi
 
 #Install virtualgo command into the activate script instead of the bashrc
-""".replace("__GOPATH__",gopath).replace("__GOROOT__",goroot).replace("__VER__",version)
+#command -v vg >/dev/null 2>&1 && eval "$(vg eval --shell bash)"
+#command -v vg >/dev/null 2>&1 && eval "$(vg eval --shell zsh)"
+#command -v vg >/dev/null 2>&1; and vg eval --shell fish | source
+""".replace("__GOPATH__",gopath).replace("__GOROOT__",goroot).replace("__VER__",version).replace("__GO_PROMPT__",gopath.split("/")[-1])
         os.makedirs(gopath+"/bin/",exist_ok=True)
         with open(gopath+"/bin/activate","w+") as f:
             f.write(activate_sh)

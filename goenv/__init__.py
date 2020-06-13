@@ -8,7 +8,7 @@ Golang distribution. Currently, the supported platforms are Linux,
 Mac OSX, and FreeBSD
 
 Usage:
-  goenv [--basedir=<basedir>] [-g <version> | --go-version=<version>] [--exclude=<path>]... [--install-only] [-q | --quiet]
+  goenv <basedir> [-g <version> | --go-version=<version>] [--exclude=<path>]... [--install-only] [-q | --quiet]
 
 Options:
   --basedir=<basedir>                       the directory to start looking for locations to add to the GOPATH [default: .]
@@ -42,7 +42,7 @@ def main():
 
     version = args.get('--go-version') if args.get('--go-version') is not None else default_version()
 
-    gopath = find_for_gopath(substitute(args.get('--basedir')), exclude)
+    gopath = find_for_gopath(substitute(args.get('basedir')), exclude)
 
     # we should have _something_ in the GOPATH...
     if not gopath:

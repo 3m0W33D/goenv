@@ -42,7 +42,7 @@ def main():
 
     version = args.get('--go-version') if args.get('--go-version') is not None else default_version()
 
-    gopath = find_for_gopath(substitute(args.get('basedir')), exclude)
+    gopath = find_for_gopath(substitute(args.get('<basedir>')), exclude)
 
     # we should have _something_ in the GOPATH...
     if not gopath:

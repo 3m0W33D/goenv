@@ -11,7 +11,7 @@ Usage:
   goenv <basedir> [-g <version> | --go-version=<version>] [--exclude=<path>]... [--install-only] [-q | --quiet]
 
 Options:
-  --basedir=<basedir>                       the directory to start looking for locations to add to the GOPATH [default: .]
+  <basedir>                       the directory to start looking for locations to add to the GOPATH [default: .]
   -g <version>, --go-version=<version>      specify a version of Go _other_ than the latest
   --exclude=<path>                          exclude a directory from the $GOPATH
   --install-only                            only download and install the specified version of Go, don't drop into a shell

@@ -9,10 +9,7 @@ import tarfile
 import platform
 from clint.textui import progress
 
-from .constants import XDG_CACHE_HOME, XDG_CONFIG_HOME, \
-                      GOENV_CACHE_HOME, GOENV_CONFIG_HOME, \
-                      GOLANG_DISTRIBUTIONS_DIR, DOWNLOAD_HOSTNAME, \
-                      DOWNLOAD_PATH, DOWNLOAD_FILENAME
+from .constants import DOWNLOAD_HOSTNAME, DOWNLOAD_PATH, DOWNLOAD_FILENAME
 
 from .utils import message
 
@@ -60,7 +57,7 @@ class Plat(object):
 
         return b"".join(whole)
 
-    def download(self):
+    def download(self, downloadpath):
         version = self.version
         architecture = self.architecture
         extension = self.extension
@@ -71,7 +68,7 @@ class Plat(object):
                                             architecture=architecture,
                                             extension=extension)
         path = DOWNLOAD_PATH.format(filename=filename)
-        fullpath = os.path.join(GOENV_CACHE_HOME, filename)
+        fullpath = os.path.join(downloadpath, filename)
         if not os.path.exists(fullpath):
             url = "http://{0}{1}".format(DOWNLOAD_HOSTNAME, path)
             self.message("Downloading {0}".format(url), file=sys.stderr)
@@ -96,8 +93,8 @@ class Unix(Plat):
         return "install_only" not in self.opts or \
                 not self.opts.get("install_only")
 
-    def go(self):
-        godir = self.extract(self.download())
+    def go(self,configs):
+        godir = self.extract(self.download(configs["cache"]),configs["distrib"])
         if self.do_subshell():
             self.subshell(godir, *self.gopath)
         else:
@@ -223,16 +220,14 @@ export PATH="$GOPATH/bin:$GOROOT/bin:$PATH"
 #Adding gobin for compiled executables
 export GOBIN="$GOPATH/bin"
 
-#Fixing installed location
-export GOPATH="$GOPATH/.goenv"
-
-export PATH="$GOPATH/bin:$PATH"
-
 # Adding local caching
 export GOCACHE="$GOPATH/.goenv/.cache"
 
 #In case of virtualgo is being used
-export VIRTUALGO_ROOT="$GOPATH/.virtualgo"
+export VIRTUALGO_ROOT="$GOPATH/.goenv/.virtualgo"
+
+#Fixing installed location
+export GOPATH="$GOPATH/go_packages"
 
 #Adding GOENV
 export GOENV="__VER__"
@@ -271,9 +266,9 @@ fi
             f.write(activate_sh)
         self.message("Please use source bin/activate")
 
-    def extract(self, filename):
+    def extract(self, filename,distpath):
         version = self.version
-        godir = os.path.join(GOLANG_DISTRIBUTIONS_DIR, version)
+        godir = os.path.join(distpath, version)
         if not os.path.exists(godir):
             self.message("Extracting {0} to {1}".format(filename, godir), file=sys.stderr)
             with tarfile.open(filename) as tarball:
@@ -282,8 +277,8 @@ fi
             self.message("Go version {0} already exists, skipping extract".format(version), file=sys.stderr)
         return godir
 
-    def download(self):
-        return super(Unix, self).download()
+    def download(self, downloadpath):
+        return super(Unix, self).download(downloadpath)
 
 
 class FreeBSD(Unix):

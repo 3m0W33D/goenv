@@ -11,7 +11,7 @@ Usage:
   goenv <basedir> [-g <version> | --go-version=<version>] [--exclude=<path>]... [--install-only] [-q | --quiet]
 
 Options:
-  <basedir>                       the directory to start looking for locations to add to the GOPATH [default: .]
+  <basedir>                       the path to create your new goenv
   -g <version>, --go-version=<version>      specify a version of Go _other_ than the latest
   --exclude=<path>                          exclude a directory from the $GOPATH
   --install-only                            only download and install the specified version of Go, don't drop into a shell
@@ -19,14 +19,12 @@ Options:
 """
 from __future__ import print_function, absolute_import
 
-__version__ = "1.9.0"
+__version__ = "2.0.0"
 
 import os
 import sys
 
-from .constants import XDG_CACHE_HOME, XDG_CONFIG_HOME, \
-                      GOENV_CACHE_HOME, GOENV_CONFIG_HOME, \
-                      GOLANG_DISTRIBUTIONS_DIR
+from .constants import GOENV_CACHE_HOME, GOENV_CONFIG_HOME, GOLANG_DISTRIBUTIONS_DIR
 from .platform_dependent import Linux, MacOSX, FreeBSD
 from .utils import message, default_version, find_for_gopath, ensure_paths, \
                   substitute, ParseGoDL
@@ -42,14 +40,21 @@ def main():
 
     version = args.get('--go-version') if args.get('--go-version') is not None else default_version()
 
-    gopath = find_for_gopath(substitute(args.get('<basedir>')), exclude)
+    #Accessing Globals
+    global GOENV_CACHE_HOME
+    global GOENV_CONFIG_HOME
+    global GOLANG_DISTRIBUTIONS_DIR
+    
+    #Getting the new path
+    newgoenv = substitute(args.get('<basedir>'))
+    gopath = [newgoenv]
 
-    # we should have _something_ in the GOPATH...
-    if not gopath:
-        gopath = [ os.getcwd() ]
-
+    GOENV_CONFIG_HOME = os.path.join(newgoenv,GOENV_CONFIG_HOME)
+    GOENV_CACHE_HOME = os.path.join(GOENV_CONFIG_HOME,GOENV_CACHE_HOME)
+    GOLANG_DISTRIBUTIONS_DIR = os.path.join(GOENV_CONFIG_HOME,GOLANG_DISTRIBUTIONS_DIR)
     quiet = args.get('--quiet')
-    ensure_paths(GOENV_CACHE_HOME, GOENV_CONFIG_HOME, GOLANG_DISTRIBUTIONS_DIR, quiet=quiet)
+
+    ensure_paths(GOENV_CONFIG_HOME,GOENV_CACHE_HOME, GOLANG_DISTRIBUTIONS_DIR, quiet=quiet)
 
     platforms = {
             "linux": Linux,
@@ -65,7 +70,11 @@ def main():
         message("Your platform '{}' is not supported, sorry!".format(sys.platform), sys.stderr, quiet)
 
     install_only = args.get('--install-only')
-    impl(version, *gopath, install_only=install_only, quiet=quiet).go()
+    impl(version, *gopath, install_only=install_only, quiet=quiet).go({
+        "config":GOENV_CONFIG_HOME,
+        "cache" :GOENV_CACHE_HOME,
+        "distrib": GOLANG_DISTRIBUTIONS_DIR
+    })
 
 
 if __name__ == u'__main__':

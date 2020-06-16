@@ -3,7 +3,7 @@ with open("requirements.txt") as fh:
     reqs = fh.read().split()
 setup(
     name = "pygoenv",
-    version = "1.9.0",
+    version = "2.0.0",
     packages = find_packages(),
 
     install_requires = reqs,

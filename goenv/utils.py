@@ -29,7 +29,7 @@ def find_for_gopath(base, exclude=None):
     if exclude is None:
         exclude = []
     alldirs = all_for_gopath(base)
-    return [ d for d in alldirs if d not in exclude and os.getcwd()+"/goenv" not in d]
+    return [ d for d in alldirs if d not in exclude]
 
 def ensure_paths(*paths, **kwds):
     quiet = kwds.pop("quiet", False)

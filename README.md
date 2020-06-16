@@ -18,10 +18,10 @@ install` away:
 
 ## Usage
 
-    $ cd /path/to/project
-    $ goenv
-    $ source bin/activate
+    $ cd /path/to
+    $ goenv project
+    $ source project/bin/activate
 
     # specify Golang version
-    $ goenv --go-version 1.1
+    $ goenv project --go-version 1.1
     Downloading http://go.googlecode.com/files/go1.1.linux-amd64.tar.gz
